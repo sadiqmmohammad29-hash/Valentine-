@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine Forever? 💖</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+        background: #000000;
+        min-height: 100vh;
+        position: relative;
+    }
+
+    /* Animated gradient background */
+    .gradient-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 20% 50%, rgba(255, 23, 68, 0.3) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(156, 39, 176, 0.3) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 20%, rgba(233, 30, 99, 0.2) 0%, transparent 50%),
+                    linear-gradient(135deg, #0a0014 0%, #1a0a1f 50%, #0f0518 100%);
+        animation: gradientShift 10s ease infinite;
+        z-index: 0;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% {
+            filter: hue-rotate(0deg) brightness(1);
+        }
+        50% {
+            filter: hue-rotate(20deg) brightness(1.2);
+        }
+    }
+
+    /* 3D Canvas Background */
+    #canvas-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Floating particles overlay */
+    .particles-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .particle {
+        position: absolute;
+        font-size: 1.5rem;
+        opacity: 0.6;
+        animation: floatParticle 15s infinite ease-in-out;
+    }
+
+    @keyframes floatParticle {
+        0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+            transform: translate(100px, -100px) rotate(90deg);
+        }
+        50% {
+            transform: translate(-50px, -200px) rotate(180deg);
+        }
+        75% {
+            transform: translate(-100px, -100px) rotate(270deg);
+        }
+    }
+
+    /* Main Container */
+    .container {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+        text-align: center;
+    }
+
+    /* Premium Glassmorphism Card */
+    .proposal-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(30px) saturate(150%);
+        border-radius: 40px;
+        padding: 70px 50px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 
+            0 8px 32px 0 rgba(255, 20, 147, 0.3),
+            0 0 80px rgba(255, 105, 180, 0.2),
+            inset 0 0 60px rgba(255, 255, 255, 0.03);
+        max-width: 700px;
+        width: 100%;
+        animation: cardEntrance 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: visible;
+    }
+
+    .proposal-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #ff1744, #ff4081, #e91e63, #9c27b0, #ff1744);
+        border-radius: 40px;
+        z-index: -1;
+        opacity: 0.3;
+        filter: blur(20px);
+        animation: rotateBorder 4s linear infinite;
+    }
+
+    @keyframes rotateBorder {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes cardEntrance {
+        0% {
+            opacity: 0;
+            transform: scale(0.7) translateY(50px) rotateX(-20deg);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1) translateY(0) rotateX(0deg);
+        }
+    }
+
+    /* Decorative elements */
+    .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        animation: sparkleAnim 2s infinite ease-in-out;
+    }
+
+    @keyframes sparkleAnim {
+        0%, 100% {
+            transform: scale(0) rotate(0deg);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.5) rotate(180deg);
+            opacity: 1;
+        }
+    }
+
+    /* Main Question Text */
+    .question {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 900;
+        background: linear-gradient(135deg, #ffffff 0%, #ff4081 50%, #ff1744 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 25px;
+        text-shadow: 0 0 40px rgba(255, 105, 180, 0.5);
+        animation: textGlow 3s ease-in-out infinite alternate;
+        letter-spacing: 2px;
+        line-height: 1.2;
+    }
+
+    @keyframes textGlow {
+        0% {
+            filter: brightness(1) drop-shadow(0 0 20px rgba(255, 105, 180, 0.4));
+        }
+        100% {
+            filter: brightness(1.3) drop-shadow(0 0 40px rgba(255, 105, 180, 0.8));
+        }
+    }
+
+    .subtitle {
+        font-family: 'Dancing Script', cursive;
+        font-size: clamp(1.3rem, 4vw, 1.8rem);
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 60px;
+        font-weight: 700;
+        text-shadow: 0 2px 20px rgba(255, 105, 180, 0.4);
+        animation: subtitleFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes subtitleFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    /* Buttons Container */
+    .buttons-container {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Button Base Style */
+    .btn {
+        padding: 22px 55px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 60px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        position: absolute;
+        z-index: 10;
+        letter-spacing: 1px;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    /* Yes Button - Always centered and stable */
+    .btn-yes {
+        background: linear-gradient(135deg, #ff1744 0%, #f50057 50%, #c51162 100%);
+        color: white;
+        border: 3px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 
+            0 10px 40px rgba(255, 23, 68, 0.5),
+            0 0 60px rgba(255, 64, 129, 0.3),
+            inset 0 0 20px rgba(255, 255, 255, 0.2);
+        position: relative !important;
+        animation: yesButtonPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes yesButtonPulse {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 
+                0 10px 40px rgba(255, 23, 68, 0.5),
+                0 0 60px rgba(255, 64, 129, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 
+                0 15px 50px rgba(255, 23, 68, 0.7),
+                0 0 80px rgba(255, 64, 129, 0.5),
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+    }
+
+    .btn-yes:hover {
+        transform: scale(1.15) translateY(-8px) !important;
+        box-shadow: 
+            0 20px 60px rgba(255, 23, 68, 0.8),
+            0 0 100px rgba(255, 64, 129, 0.6),
+            inset 0 0 30px rgba(255, 255, 255, 0.3);
+        animation: none;
+    }
+
+    .btn-yes:active {
+        transform: scale(1.1) translateY(-5px) !important;
+    }
+
+    /* No Button - Continuously floating and running away */
+    .btn-no {
+        background: linear-gradient(135deg, rgba(120, 120, 120, 0.4) 0%, rgba(80, 80, 80, 0.6) 100%);
+        color: rgba(255, 255, 255, 0.8);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        animation: floatAround 4s ease-in-out infinite;
+        pointer-events: auto;
+    }
+
+    @keyframes floatAround {
+        0% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+        }
+        25% {
+            transform: translate(80px, -30px) rotate(5deg) scale(0.95);
+        }
+        50% {
+            transform: translate(-20px, 40px) rotate(-5deg) scale(1.05);
+        }
+        75% {
+            transform: translate(-80px, -20px) rotate(5deg) scale(0.95);
+        }
+        100% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+        }
+    }
+
+    .btn-no:hover {
+        animation: runAway 0.5s ease-out forwards;
+    }
+
+    @keyframes runAway {
+        0% {
+            transform: translate(var(--tx, 0), var(--ty, 0)) scale(1) rotate(0deg);
+        }
+        50% {
+            transform: translate(var(--tx, 0), var(--ty, 0)) scale(0.8) rotate(20deg);
+        }
+        100% {
+            transform: translate(var(--tx, 0), var(--ty, 0)) scale(1) rotate(0deg);
+        }
+    }
+
+    /* Success Message */
+    .success-message {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        background: radial-gradient(circle, rgba(255, 20, 147, 0.3) 0%, rgba(0, 0, 0, 0.95) 70%);
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        animation: successFadeIn 1s ease-out;
+    }
+
+    .success-message.active {
+        display: flex;
+    }
+
+    @keyframes successFadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .success-text {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        background: linear-gradient(135deg, #ffffff 0%, #ff4081 50%, #ff1744 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 30px;
+        animation: successTextAnim 2s ease-out;
+        text-align: center;
+        padding: 0 20px;
+    }
+
+    @keyframes successTextAnim {
+        0% {
+            transform: scale(0) rotate(-10deg);
+            opacity: 0;
+        }
+        60% {
+            transform: scale(1.2) rotate(5deg);
+        }
+        100% {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+        }
+    }
+
+    .success-subtext {
+        font-family: 'Dancing Script', cursive;
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        color: rgba(255, 255, 255, 0.95);
+        text-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
+        animation: successSubtextAnim 2s ease-out 0.3s backwards;
+    }
+
+    @keyframes successSubtextAnim {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Modal for No Button */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+        z-index: 999;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.4s ease;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    @keyframes fadeIn {
+        from { 
+            opacity: 0;
+            backdrop-filter: blur(0px);
+        }
+        to { 
+            opacity: 1;
+            backdrop-filter: blur(10px);
+        }
+    }
+
+    .modal-content {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(30px) saturate(150%);
+        border-radius: 30px;
+        padding: 50px 40px;
+        max-width: 550px;
+        width: 90%;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 
+            0 20px 60px rgba(255, 20, 147, 0.4),
+            inset 0 0 40px rgba(255, 255, 255, 0.05);
+        animation: modalSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            transform: scale(0.7) translateY(-50px) rotateX(-20deg);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1) translateY(0) rotateX(0deg);
+            opacity: 1;
+        }
+    }
+
+    .modal-emoji {
+        font-size: 4rem;
+        margin-bottom: 25px;
+        animation: emojiRotate 0.6s ease-out;
+    }
+
+    @keyframes emojiRotate {
+        0% {
+            transform: rotate(0deg) scale(0);
+        }
+        50% {
+            transform: rotate(180deg) scale(1.3);
+        }
+        100% {
+            transform: rotate(360deg) scale(1);
+        }
+    }
+
+    .modal-text {
+        font-size: 1.6rem;
+        color: #fff;
+        margin-bottom: 20px;
+        line-height: 1.7;
+        font-weight: 600;
+    }
+
+    .close-modal {
+        background: linear-gradient(135deg, #ff1744 0%, #f50057 100%);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        padding: 15px 40px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-top: 25px;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(255, 23, 68, 0.4);
+    }
+
+    .close-modal:hover {
+        transform: scale(1.08) translateY(-3px);
+        box-shadow: 0 15px 40px rgba(255, 23, 68, 0.6);
+    }
+
+    .close-modal:active {
+        transform: scale(1.02) translateY(-1px);
+    }
+
+    /* Heart Particles */
+    .heart-particle {
+        position: fixed;
+        font-size: 2.5rem;
+        pointer-events: none;
+        z-index: 9999;
+        animation: floatUpHeart 4s ease-out forwards;
+    }
+
+    @keyframes floatUpHeart {
+        0% {
+            transform: translateY(0) scale(0) rotate(0deg);
+            opacity: 1;
+        }
+        50% {
+            transform: translateY(-50vh) scale(1.5) rotate(180deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-120vh) scale(2) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    /* Confetti */
+    .confetti {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        pointer-events: none;
+        z-index: 9999;
+        animation: confettiFall 4s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+        0% {
+            transform: translateY(-10px) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .proposal-card {
+            padding: 50px 30px;
+            border-radius: 30px;
+        }
+
+        .buttons-container {
+            height: 180px;
+        }
+
+        .btn {
+            padding: 18px 40px;
+            font-size: 1.2rem;
+        }
+
+        @keyframes floatAround {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translate(50px, -20px) rotate(5deg) scale(0.95);
+            }
+            50% {
+                transform: translate(-15px, 30px) rotate(-5deg) scale(1.05);
+            }
+            75% {
+                transform: translate(-50px, -15px) rotate(5deg) scale(0.95);
+            }
+            100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <!-- Animated Gradient Background -->
+    <div class="gradient-bg"></div>
+
+```
+<!-- 3D Canvas Container -->
+<div id="canvas-container"></div>
+
+<!-- Floating Particles Overlay -->
+<div class="particles-overlay" id="particlesOverlay"></div>
+
+<!-- Main Container -->
+<div class="container">
+    <div class="proposal-card" id="proposalCard">
+        <!-- Decorative sparkles -->
+        <div class="sparkle" style="top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="sparkle" style="top: 20%; right: 15%; animation-delay: 0.5s;"></div>
+        <div class="sparkle" style="bottom: 15%; left: 20%; animation-delay: 1s;"></div>
+        <div class="sparkle" style="bottom: 25%; right: 10%; animation-delay: 1.5s;"></div>
+
+        <h1 class="question">Will You Be My Valentine Forever?</h1>
+        <p class="subtitle">Choose wisely... or can you even catch me? 😏</p>
+        
+        <div class="buttons-container" id="buttonsContainer">
+            <button class="btn btn-yes" id="btnYes">Yes, I know ❤️</button>
+            <button class="btn btn-no" id="btnNo">No 😏</button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Message -->
+<div class="success-message" id="successMessage">
+    <div class="success-text">You just made my forever beautiful 💍❤️</div>
+    <div class="success-subtext">I love you endlessly...</div>
+</div>
+
+<!-- Modal for No Button -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <div class="modal-emoji">😂</div>
+        <div class="modal-text">It's a joke. The day is already booked 😂</div>
+        <div class="modal-text">Kaisa laga mera mazak?</div>
+        <button class="close-modal" id="closeModal">Haha, Got Me! 😄</button>
+    </div>
+</div>
+
+<!-- Audio Element -->
+<audio id="bgMusic" loop>
+    <source src="https://github.com/sadiqmmohammad29-hash/Valentine-/raw/main/Under%20The%20Influence%20%C3%97%20I%20Was%20Never%20There%20Ringtone%20%7C%20Download%20Link%20%E2%AC%87%EF%B8%8F.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    // ============ FLOATING PARTICLES OVERLAY ============
+    const particlesOverlay = document.getElementById('particlesOverlay');
+    const particleEmojis = ['✨', '💕', '💖', '🌟', '💫', '⭐', '💗', '💝'];
+
+    for (let i = 0; i < 25; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.textContent = particleEmojis[Math.floor(Math.random() * particleEmojis.length)];
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        particlesOverlay.appendChild(particle);
+    }
+
+    // ============ THREE.JS BACKGROUND ============
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    // Create floating 3D hearts
+    const heartShape = new THREE.Shape();
+    heartShape.moveTo(0, 0);
+    heartShape.bezierCurveTo(0, -0.3, -0.6, -0.3, -0.6, 0);
+    heartShape.bezierCurveTo(-0.6, 0.3, 0, 0.6, 0, 1);
+    heartShape.bezierCurveTo(0, 0.6, 0.6, 0.3, 0.6, 0);
+    heartShape.bezierCurveTo(0.6, -0.3, 0, -0.3, 0, 0);
+
+    const extrudeSettings = {
+        depth: 0.3,
+        bevelEnabled: true,
+        bevelSegments: 3,
+        steps: 2,
+        bevelSize: 0.15,
+        bevelThickness: 0.15
+    };
+
+    const hearts = [];
+    const heartColors = [0xff1744, 0xff4081, 0xf50057, 0xc51162, 0xe91e63];
+
+    for (let i = 0; i < 40; i++) {
+        const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+        const material = new THREE.MeshPhongMaterial({ 
+            color: heartColors[Math.floor(Math.random() * heartColors.length)],
+            transparent: true,
+            opacity: 0.5,
+            shininess: 100,
+            emissive: heartColors[Math.floor(Math.random() * heartColors.length)],
+            emissiveIntensity: 0.2
+        });
+        const heart = new THREE.Mesh(geometry, material);
+        
+        heart.position.x = (Math.random() - 0.5) * 60;
+        heart.position.y = (Math.random() - 0.5) * 60;
+        heart.position.z = (Math.random() - 0.5) * 60;
+        
+        heart.rotation.x = Math.random() * Math.PI * 2;
+        heart.rotation.y = Math.random() * Math.PI * 2;
+        
+        const scale = Math.random() * 0.4 + 0.3;
+        heart.scale.set(scale, scale, scale);
+        
+        scene.add(heart);
+        hearts.push({
+            mesh: heart,
+            speedX: (Math.random() - 0.5) * 0.02,
+            speedY: Math.random() * 0.02 + 0.01,
+            speedZ: (Math.random() - 0.5) * 0.02,
+            rotationSpeed: {
+                x: (Math.random() - 0.5) * 0.02,
+                y: (Math.random() - 0.5) * 0.02,
+                z: (Math.random() - 0.5) * 0.02
+            }
+        });
+    }
+
+    // Enhanced Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    const pointLight1 = new THREE.PointLight(0xff1744, 3, 100);
+    pointLight1.position.set(15, 15, 15);
+    scene.add(pointLight1);
+
+    const pointLight2 = new THREE.PointLight(0xff4081, 3, 100);
+    pointLight2.position.set(-15, -15, 15);
+    scene.add(pointLight2);
+
+    const pointLight3 = new THREE.PointLight(0x9c27b0, 2, 100);
+    pointLight3.position.set(0, 20, -20);
+    scene.add(pointLight3);
+
+    camera.position.z = 25;
+
+    // Animation loop
+    let time = 0;
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.01;
+        
+        hearts.forEach(heartObj => {
+            heartObj.mesh.rotation.x += heartObj.rotationSpeed.x;
+            heartObj.mesh.rotation.y += heartObj.rotationSpeed.y;
+            heartObj.mesh.rotation.z += heartObj.rotationSpeed.z;
+            
+            heartObj.mesh.position.x += heartObj.speedX;
+            heartObj.mesh.position.y += heartObj.speedY;
+            heartObj.mesh.position.z += heartObj.speedZ;
+            
+            if (heartObj.mesh.position.y > 30) {
+                heartObj.mesh.position.y = -30;
+            }
+            if (heartObj.mesh.position.x > 30 || heartObj.mesh.position.x < -30) {
+                heartObj.speedX *= -1;
+            }
+            if (heartObj.mesh.position.z > 30 || heartObj.mesh.position.z < -30) {
+                heartObj.speedZ *= -1;
+            }
+        });
+        
+        // Animate lights
+        pointLight1.position.x = Math.sin(time) * 20;
+        pointLight2.position.y = Math.cos(time) * 20;
+        
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Resize handler
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // ============ INTERACTIVE BUTTONS ============
+    const btnYes = document.getElementById('btnYes');
+    const btnNo = document.getElementById('btnNo');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
+    const successMessage = document.getElementById('successMessage');
+    const proposalCard = document.getElementById('proposalCard');
+    const bgMusic = document.getElementById('bgMusic');
+    const buttonsContainer = document.getElementById('buttonsContainer');
+
+    // Position No button initially
+    btnNo.style.position = 'absolute';
+    btnNo.style.left = '50%';
+    btnNo.style.top = '50%';
+    btnNo.style.transform = 'translate(-50%, -50%)';
+
+    // Make No button run away on hover/touch
+    function runAwayFromCursor(e) {
+        const rect = buttonsContainer.getBoundingClientRect();
+        const btnRect = btnNo.getBoundingClientRect();
+        
+        let mouseX, mouseY;
+        if (e.type === 'touchstart') {
+            mouseX = e.touches[0].clientX;
+            mouseY = e.touches[0].clientY;
+        } else {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        }
+        
+        const btnCenterX = btnRect.left + btnRect.width / 2;
+        const btnCenterY = btnRect.top + btnRect.height / 2;
+        
+        const deltaX = btnCenterX - mouseX;
+        const deltaY = btnCenterY - mouseY;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        
+        if (distance < 150) {
+            const angle = Math.atan2(deltaY, deltaX);
+            const moveDistance = 200;
+            
+            let newX = btnCenterX + Math.cos(angle) * moveDistance - rect.left;
+            let newY = btnCenterY + Math.sin(angle) * moveDistance - rect.top;
+            
+            newX = Math.max(btnRect.width / 2, Math.min(rect.width - btnRect.width / 2, newX));
+            newY = Math.max(btnRect.height / 2, Math.min(rect.height - btnRect.height / 2, newY));
+            
+            btnNo.style.left = newX + 'px';
+            btnNo.style.top = newY + 'px';
+            btnNo.style.transform = 'translate(-50%, -50%)';
+        }
+    }
+
+    // Track mouse movement for No button
+    buttonsContainer.addEventListener('mousemove', runAwayFromCursor);
+    buttonsContainer.addEventListener('touchmove', runAwayFromCursor);
+
+    btnNo.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.classList.add('active');
+    });
+
+    closeModal.addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
+
+    // Yes button click
+    btnYes.addEventListener('click', () => {
+        proposalCard.style.display = 'none';
+        successMessage.classList.add('active');
+        
+        bgMusic.play().catch(err => console.log('Audio play failed:', err));
+        
+        createHeartExplosion();
+        createConfetti();
+    });
+
+    // Heart explosion effect
+    function createHeartExplosion() {
+        const hearts = ['❤️', '💖', '💕', '💗', '💓', '💞', '💝', '💘', '💟'];
+        
+        for (let i = 0; i < 80; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart-particle';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = (Math.random() * 100) + '%';
+                heart.style.top = (Math.random() * 50 + 50) + '%';
+                heart.style.animationDelay = (Math.random() * 0.5) + 's';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                document.body.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 4500);
+            }, i * 40);
+        }
+    }
+
+    // Confetti effect
+    function createConfetti() {
+        const colors = ['#ff1744', '#ff4081', '#ff80ab', '#f50057', '#c51162', '#e91e63', '#9c27b0', '#ffffff'];
+        
+        for (let i = 0; i < 150; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = (Math.random() * 100) + '%';
+                confetti.style.top = '-20px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 4500);
+            }, i * 20);
+        }
+    }
+
+    // Prevent context menu
+    document.addEventListener('contextmenu', e => e.preventDefault());
+</script>
+```
+
+</body>
+</html>

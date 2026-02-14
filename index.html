@@ -646,9 +646,13 @@
     </div>
 </div>
 
-<!-- Audio Element -->
+<!-- Audio Elements -->
 <audio id="bgMusic" loop>
     <source src="https://github.com/sadiqmmohammad29-hash/Valentine-/raw/main/Under%20The%20Influence%20%C3%97%20I%20Was%20Never%20There%20Ringtone%20%7C%20Download%20Link%20%E2%AC%87%EF%B8%8F.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="noMusic">
+    <source src="https://github.com/sadiqmmohammad29-hash/Valentine-/raw/main/kaisa%20laga%20mera%20majak%20%F0%9F%98%82%F0%9F%98%82.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -799,6 +803,7 @@
     const successMessage = document.getElementById('successMessage');
     const proposalCard = document.getElementById('proposalCard');
     const bgMusic = document.getElementById('bgMusic');
+    const noMusic = document.getElementById('noMusic');
     const buttonsContainer = document.getElementById('buttonsContainer');
 
     // Position No button initially
@@ -851,10 +856,13 @@
     btnNo.addEventListener('click', (e) => {
         e.preventDefault();
         modal.classList.add('active');
+        noMusic.play().catch(err => console.log('Audio play failed:', err));
     });
 
     closeModal.addEventListener('click', () => {
         modal.classList.remove('active');
+        noMusic.pause();
+        noMusic.currentTime = 0;
     });
 
     // Yes button click
